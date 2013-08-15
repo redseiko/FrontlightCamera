@@ -56,13 +56,13 @@ public class MainActivity extends Activity
 				output.close();
 
 				MediaScannerConnection.scanFile(MainActivity.this, new String[] { file.toString() }, null, null);
+				
+				Toast.makeText(MainActivity.this, "Saved picture as: " + timestamp + ".jpg", Toast.LENGTH_SHORT).show();
 			}
 			catch (IOException exception)
 			{
 				Toast.makeText(MainActivity.this, "Unable to save picture!", Toast.LENGTH_SHORT).show();
 			}
-
-			Toast.makeText(MainActivity.this, "Saved picture as: " + timestamp + ".jpg", Toast.LENGTH_SHORT).show();
 
 			camera.startPreview();
 		}
@@ -169,11 +169,10 @@ public class MainActivity extends Activity
 		}
 
 		int rotation = getWindowManager().getDefaultDisplay().getRotation() * 90;
-
+		int cameraRotation = (cameraInfo.orientation + rotation + 360) % 360;
+		
 		Camera.Parameters cameraParameters = mCamera.getParameters();
-
-		int rot = (cameraInfo.orientation + rotation + 360) % 360;
-		cameraParameters.setRotation(rot);
+		cameraParameters.setRotation(cameraRotation);
 
 		mCamera.setParameters(cameraParameters);
 		mCamera.setDisplayOrientation((360 - ((cameraInfo.orientation + rotation) % 360)) % 360);
